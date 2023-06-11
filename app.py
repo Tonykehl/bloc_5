@@ -31,7 +31,7 @@ revenue_affected = pricing_data[pricing_data['has_getaround_connect']]['rental_p
 revenue_percentage = (revenue_affected / total_revenue) * 100
 
 # Affichage du résultat
-st.write("La part des revenus potentiellement affectée par la fonctionnalité est de", round(revenue_percentage, 2), "%")
+ st.write("La part des revenus potentiellement affectée par la fonctionnalité est de", round(revenue_percentage, 2), "%")
 
 # Nombre de locations affectées en fonction du seuil et de la portée
 st.header("Nombre de locations affectées en fonction du seuil et de la portée")
@@ -87,22 +87,42 @@ fig.update_layout(title='Évolution du nombre de locations affectées en fonctio
 # Affichage du graphique
 st.plotly_chart(fig)
 
-import requests
-import json
-import mlflow.pyfunc 
+ 
+## Création d'un endpoint/predict
 
-url = "https://your-url.com/predict" 
+!pip install Flask mlflow
 
-model_uri = "runs:/<RUN_ID>/model"  
-model = mlflow.pyfunc.load_model(model_uri)
+from flask import Flask, request, jsonify
+import mlflow.pyfunc
 
-input_data = {
+app = Flask(__name__)
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    # Récupérer les données d'entrée JSON
+    data = request.get_json()
+    inputs = data['input']
+    
+    # Charger le modèle MLflow
+    model = mlflow.pyfunc.load_model('path/to/your/model')
+    
+    # Effectuer les prédictions à l'aide du modèle d'apprentissage automatique
+    predictions = model.predict(inputs)
+    
+    # Construire la réponse JSON avec les prédictions
+    response = {'prediction': predictions}
+    
+    # Renvoyer la réponse au client
+    return jsonify(response)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+response = requests.post("https://my_app.herokuapp.com/predict", json={
     "input": [[7.0, 0.27, 0.36, 20.7, 0.045, 45.0, 170.0, 1.001, 3.0, 0.45, 8.8]]
-}
-input_json = json.dumps(input_data)
+})
+print(response.json())
 
-response = requests.post(url, json=input_json)
-
-predictions = response.json()["prediction"]
-
-print(predictions)

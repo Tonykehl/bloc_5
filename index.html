@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Documentation de l'API</title>
+</head>
+<body>
+    <h1>API de suggestion de prix pour les propriétaires de voitures</h1>
+    
+    <h2>/predict</h2>
+    <p><strong>Méthode :</strong> POST</p>
+    <p><strong>Entrée requise :</strong> Les données JSON doivent être envoyées avec une clé "input" contenant une liste des données d'entrée.</p>
+    <p><strong>Sortie attendue :</strong> La réponse JSON contient une clé "prediction" contenant une liste des prédictions de prix.</p>
+    <p><strong>Exemple d'utilisation :</strong></p>
+    <pre>
+        {
+          "input": [[7.0, 0.27, 0.36, 20.7, 0.045, 45.0, 170.0, 1.001, 3.0, 0.45, 8.8], [7.0, 0.27, 0.36, 20.7, 0.045, 45.0, 170.0, 1.001, 3.0, 0.45, 8.8]]
+        }
+    </pre>
+</body>
+</html>
